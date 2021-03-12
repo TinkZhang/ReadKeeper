@@ -1,6 +1,6 @@
 package ink.iamt.readkeeper.network
 
-import ink.iamt.readkeeper.network.dto.OpenLibrarySearchDto
+import ink.iamt.readkeeper.network.model.dto.OpenLibrarySearchDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

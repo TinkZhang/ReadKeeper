@@ -12,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import ink.iamt.readkeeper.search.SearchBook
 import ink.iamt.readkeeper.search.SearchStatus
 import ink.iamt.readkeeper.search.SearchViewModel
 import ink.iamt.readkeeper.ui.theme.ReadKeeperTheme
@@ -35,16 +36,22 @@ class MainActivity : ComponentActivity() {
 fun Greeting(viewModel: SearchViewModel) {
     val status: SearchStatus by viewModel.status.observeAsState(SearchStatus.STALE)
     val foundNumber: Int by viewModel.numberFound.observeAsState(0)
+    val books: List<SearchBook> by viewModel.books.observeAsState(listOf())
+
     Row {
         val label = when(status){
-            SearchStatus.STALE -> "found $foundNumber books!!"
+            SearchStatus.STALE -> if(books.isNotEmpty())
+                {"found $foundNumber books!! and the first book is ${books[0].title}"}
+            else {
+                "press the button ->"
+            }
             SearchStatus.LOADING -> "loading"
             SearchStatus.LOADING_MORE -> TODO()
             SearchStatus.ERROR -> "something went wrong"
         }
         Text(text = "$label")
         Button(onClick = {
-            viewModel.search("hello")
+            viewModel.search("kotlin")
         }) {
             Text(text = "Search")
         }
