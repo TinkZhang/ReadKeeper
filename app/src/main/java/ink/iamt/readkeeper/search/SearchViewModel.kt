@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 const val TAG = "SearchViewModel"
-class SearchViewModel(): ViewModel() {
+class SearchViewModel : ViewModel() {
     private val _status = MutableLiveData(SearchStatus.STALE)
     val status: LiveData<SearchStatus> = _status
 
@@ -21,14 +21,14 @@ class SearchViewModel(): ViewModel() {
     private val _books = MutableLiveData<List<SearchBook>>()
     val books: LiveData<List<SearchBook>> = _books
 
-    val mapper = OpenLibraryMapper()
+    private val mapper = OpenLibraryMapper()
 
     fun search(keyword: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _status.postValue(SearchStatus.LOADING)
             val response = SearchRepository.search(keyword, SearchEngine.OPEN_LIBRARY)
             if (response.isSuccessful) {
-                Log.d(TAG, "${response.body().toString()}")
+                Log.d(TAG, response.body().toString())
                 val result = response.body() as? OpenLibrarySearchDto
                 _numberFound.postValue(result?.numFound)
                 _status.postValue(SearchStatus.STALE)
